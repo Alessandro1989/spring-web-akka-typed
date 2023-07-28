@@ -1,2 +1,2 @@
 # spring-akka-typed
-prototype spring-akka typed
+A prototype that integrate spring with akka type
