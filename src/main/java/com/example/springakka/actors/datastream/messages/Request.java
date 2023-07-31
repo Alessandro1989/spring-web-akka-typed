@@ -8,8 +8,10 @@ import lombok.Setter;
 @Setter
 public class Request implements Command {
     private final ActorRef<Command> replyTo;
+    private final ActorRef<QueryToken> tokenActor;
 
-    public Request(ActorRef<Command> replyTo) {
+    public Request(ActorRef<Command> replyTo, ActorRef<QueryToken> tokenActor) {
         this.replyTo = replyTo;
+        this.tokenActor = tokenActor;
     }
 }

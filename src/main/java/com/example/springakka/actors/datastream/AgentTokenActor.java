@@ -8,10 +8,11 @@ import akka.actor.typed.javadsl.Receive;
 import com.example.springakka.actors.datastream.messages.QueryToken;
 import com.example.springakka.actors.datastream.messages.ResponseToken;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 
 public class AgentTokenActor extends AbstractBehavior<QueryToken> {
-
+    private String token;
     public static Behavior<QueryToken> create() {
         return Behaviors.setup(AgentTokenActor::new);
     }
@@ -26,7 +27,10 @@ public class AgentTokenActor extends AbstractBehavior<QueryToken> {
 
     private Behavior<QueryToken> onQuery(QueryToken query) {
         System.out.println("request to token actor: " + this.getContext().getSelf());
-        ResponseToken r = new ResponseToken(query.getRequest(),RandomStringUtils.randomAlphabetic(10));
+        if(StringUtils.isBlank(token)){
+            token = RandomStringUtils.randomAlphabetic(10);
+        }
+        ResponseToken r = new ResponseToken(query.getRequest(),token);
         query.getReplyTo().tell(r);
         return this;
     }

@@ -29,7 +29,7 @@ public class DataStreamService {
         CompletionStage<Command> result =
                 AskPattern.ask(
                         containerPool.getPoolQuery(),
-                        replyTo -> new Request(replyTo),
+                        replyTo -> new Request(replyTo, containerPool.getTokenActor()),
                         Duration.ofSeconds(300),
                         containerPool.getSystem().scheduler());
         ResponseJson r = (ResponseJson) result.toCompletableFuture().get();

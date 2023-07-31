@@ -9,8 +9,10 @@ import akka.actor.typed.javadsl.Behaviors;
 import akka.actor.typed.javadsl.PoolRouter;
 import akka.actor.typed.javadsl.Routers;
 import com.example.springakka.ContainerPool;
+import com.example.springakka.actors.datastream.AgentTokenActor;
 import com.example.springakka.actors.datastream.QueryActor;
 import com.example.springakka.actors.datastream.messages.Command;
+import com.example.springakka.actors.datastream.messages.QueryToken;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -30,7 +32,8 @@ public class AkkaConfig {
                     poolSize,
                     Behaviors.supervise(QueryActor.create()).onFailure(SupervisorStrategy.restart())).withRoundRobinRouting();
             ActorRef<Command> poolQuery = context.spawn(pool, "query-pool");
-            ContainerPool containerPool = new ContainerPool(context.getSystem(), poolQuery);
+            ActorRef<QueryToken> tokenActorRef = context.spawn(AgentTokenActor.create(), "tokenActor");
+            ContainerPool containerPool = new ContainerPool(context.getSystem(), poolQuery, tokenActorRef);
             completableFuture.complete(containerPool);
             return Behaviors.empty();
         });

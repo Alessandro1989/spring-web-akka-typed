@@ -13,14 +13,11 @@ public class QueryActor extends AbstractBehavior<Command> {
     public static Behavior<Command> create() {
         return Behaviors.setup(QueryActor::new);
     }
-    private final ActorRef<QueryToken> tokenActor;
     private final ActorRef<QueryDownload> downloadActor;
     private QueryActor(ActorContext<Command> context) {
         super(context);
         System.out.println("query actory: "+ this.getContext().getSelf());
-        tokenActor = context.spawn(AgentTokenActor.create(), "tokenAgent");
         downloadActor = context.spawn(AgentDownloadActor.create(), "downloadAgent");
-        System.out.println("token actor: " + tokenActor);
         System.out.println("download actor: " + downloadActor);
     }
 
@@ -50,7 +47,7 @@ public class QueryActor extends AbstractBehavior<Command> {
 
     private Behavior<Command> onRequest(Request request) {
         System.out.println("request to query actor: " + this.getContext().getSelf());
-        tokenActor.tell(new QueryToken(request, this.getContext().getSelf()));
+        request.getTokenActor().tell(new QueryToken(request, this.getContext().getSelf()));
         return this;
     }
 }
