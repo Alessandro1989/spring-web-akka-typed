@@ -2,12 +2,17 @@ package com.example.springakka.actors.datastream;
 
 import akka.actor.typed.ActorRef;
 import akka.actor.typed.Behavior;
+import akka.actor.typed.SupervisorStrategy;
 import akka.actor.typed.javadsl.AbstractBehavior;
 import akka.actor.typed.javadsl.ActorContext;
 import akka.actor.typed.javadsl.Behaviors;
 import akka.actor.typed.javadsl.Receive;
 import com.example.springakka.actors.datastream.messages.*;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
+@Component
+@Scope("prototype")
 public class QueryActor extends AbstractBehavior<Command> {
 
     public static Behavior<Command> create() {
@@ -17,7 +22,8 @@ public class QueryActor extends AbstractBehavior<Command> {
     private QueryActor(ActorContext<Command> context) {
         super(context);
         System.out.println("query actory: "+ this.getContext().getSelf());
-        downloadActor = context.spawn(AgentDownloadActor.create(), "downloadAgent");
+        downloadActor = context.spawn(Behaviors.supervise(AgentDownloadActor.create()).onFailure(SupervisorStrategy.restart()),
+                "downloadAgent");
         System.out.println("download actor: " + downloadActor);
     }
 

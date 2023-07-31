@@ -32,7 +32,8 @@ public class AkkaConfig {
                     poolSize,
                     Behaviors.supervise(QueryActor.create()).onFailure(SupervisorStrategy.restart())).withRoundRobinRouting();
             ActorRef<Command> poolQuery = context.spawn(pool, "query-pool");
-            ActorRef<QueryToken> tokenActorRef = context.spawn(AgentTokenActor.create(), "tokenActor");
+            ActorRef<QueryToken> tokenActorRef = context.spawn(Behaviors.supervise(AgentTokenActor.create())
+                    .onFailure(SupervisorStrategy.resume()), "tokenActor");
             ContainerPool containerPool = new ContainerPool(context.getSystem(), poolQuery, tokenActorRef);
             completableFuture.complete(containerPool);
             return Behaviors.empty();

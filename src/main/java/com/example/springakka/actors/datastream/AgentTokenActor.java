@@ -9,8 +9,12 @@ import com.example.springakka.actors.datastream.messages.QueryToken;
 import com.example.springakka.actors.datastream.messages.ResponseToken;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 
+@Component
+@Scope("prototype")
 public class AgentTokenActor extends AbstractBehavior<QueryToken> {
     private String token;
     public static Behavior<QueryToken> create() {

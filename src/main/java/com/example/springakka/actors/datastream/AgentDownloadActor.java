@@ -9,8 +9,11 @@ import com.example.springakka.actors.datastream.messages.QueryDownload;
 import com.example.springakka.actors.datastream.messages.ResponseDownload;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-
+@Component
+@Scope("prototype")
 public class AgentDownloadActor extends AbstractBehavior<QueryDownload> {
 
     public static Behavior<QueryDownload> create() {
