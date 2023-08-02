@@ -30,7 +30,7 @@ public class DataStreamService {
                 AskPattern.ask(
                         containerPool.getPoolQuery(),
                         replyTo -> new Request(replyTo, containerPool.getTokenActor()),
-                        Duration.ofSeconds(300),
+                        Duration.ofSeconds(10),
                         containerPool.getSystem().scheduler());
         ResponseJson r = (ResponseJson) result.toCompletableFuture().get();
         log.info("response: {}", r.getResponseJson());

@@ -15,6 +15,7 @@ import com.example.springakka.actors.datastream.messages.Command;
 import com.example.springakka.actors.datastream.messages.QueryToken;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -24,6 +25,7 @@ import java.util.concurrent.ExecutionException;
 public class AkkaConfig {
 
     @Bean
+    @DependsOn("beanUtil")
     public ContainerPool initializeContainerPoolQuery() throws InterruptedException, ExecutionException {
         int poolSize = 6;
         CompletableFuture<ContainerPool> completableFuture = new CompletableFuture<>();

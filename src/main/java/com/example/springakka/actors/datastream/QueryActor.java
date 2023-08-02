@@ -8,11 +8,7 @@ import akka.actor.typed.javadsl.ActorContext;
 import akka.actor.typed.javadsl.Behaviors;
 import akka.actor.typed.javadsl.Receive;
 import com.example.springakka.actors.datastream.messages.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
-@Component
-@Scope("prototype")
 public class QueryActor extends AbstractBehavior<Command> {
 
     public static Behavior<Command> create() {
